@@ -1,0 +1,1 @@
+function synop { python "C:\Users\Admin\Documents\synop_decode.py" @args }

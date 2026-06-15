@@ -1,0 +1,19 @@
+#commands for accessing
+1.go to docs
+
+2.reload the file:
+. $PROFILE
+
+3.single decoder:
+synop decode "AAXX 06091`n43279 32597 31410 10390 20264 30018 40035 83400`n333`n10264"
+
+4.Batch file:
+synop batch -f C:\Users\Admin\Documents\messages.txt
+
+5.For config:
+synop config
+
+6.Wrong header error test:
+synop decode "BBXX 06091`n43279 32597"
+
+ 

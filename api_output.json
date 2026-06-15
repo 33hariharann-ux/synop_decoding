@@ -1,0 +1,47 @@
+﻿{
+  "errors": [],
+  "header": {
+    "day": "06",
+    "hour_utc": "09",
+    "wind_unit": "Anemometer (knots)"
+  },
+  "section1": {
+    "cloud_base_height": "600-1000 m",
+    "cloud_cover": "SCT \u2013 3 oktas (3/8)",
+    "cloud_cover_lowest": "SCT \u2013 3 oktas (3/8)",
+    "cloud_high_CH": "0",
+    "cloud_low_CL": "4",
+    "cloud_mid_CM": "0",
+    "exact_obs_time": null,
+    "humidity_pct": 91,
+    "past_weather_W1_code": null,
+    "past_weather_W1_desc": null,
+    "past_weather_W2_code": null,
+    "past_weather_W2_desc": null,
+    "precip_flag": "Precipitation omitted \u2013 no precipitation",
+    "precipitation": null,
+    "present_weather_code": null,
+    "present_weather_desc": null,
+    "pressure_slp_hpa": "1003.5 hPa",
+    "pressure_station_hpa": "1001.8 hPa",
+    "pressure_tendency": null,
+    "station_type": "Manned station \u2013 present weather omitted",
+    "temp_dew_point_c": 26.4,
+    "temp_dry_bulb_c": 39.0,
+    "visibility": "10 km",
+    "wind_direction_compass": "SE (140 deg)",
+    "wind_direction_deg": 140,
+    "wind_speed_kmph": 18.5,
+    "wind_speed_knots": 10,
+    "wind_unit": "knots"
+  },
+  "section3": {
+    "max_temp_c": 26.4,
+    "min_temp_c": null,
+    "precipitation": null,
+    "snow_ground": null,
+    "sunshine": null
+  },
+  "station": "43279",
+  "status": "ok"
+}

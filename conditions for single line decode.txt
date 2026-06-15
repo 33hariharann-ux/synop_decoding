@@ -1,0 +1,17 @@
+#conditions for single line decode
+
+1.just type:. $PROFILE
+
+2.and this command for decode structure:
+synop decode "AAXX 06091`n43279 32597 31410 10390 20264 30018 40035 83400`n333`n10264"
+
+
+But if it is want to be skipped 
+1.Open notepad:
+notepad $PROFILES
+
+2.Add this line in that file:
+function synop { python "C:\Users\Admin\Documents\synop_decode.py" @args }
+
+3.THen save the notepad exit and reset the notepad and enter this command:
+synop decode "AAXX 06091`n43279 32597 31410 10390 20264 30018 40035 83400`n333`n10264"

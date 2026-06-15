@@ -1,0 +1,9 @@
+﻿
+  +--------------------------------------------------------------+
+  |               SYNOP FM-12 SURFACE CODE DECODER               |
+  +--------------------------------------------------------------+
+
+  [!]  ERROR: Message must start with 'AAXX' (or 'aaxx').
+  [!]           Got      : 'BBXX'
+  [!]           Expected : AAXX YYGGiw  (e.g. AAXX 06091)
+
