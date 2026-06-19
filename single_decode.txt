@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Single Decode – SYNOP Decoder</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; background: #f4f7fa; }
+
+        .header {
+            background: linear-gradient(135deg, #003366, #0056b3);
+            color: white;
+            padding: 22px 30px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .header a  { color: #aad4ff; text-decoration: none; font-size: 14px; }
+        .header h1 { font-size: 22px; }
+
+        .main { max-width: 860px; margin: 36px auto; padding: 0 20px; }
+
+        .input-card {
+            background: white;
+            border-radius: 10px;
+            padding: 28px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 28px;
+        }
+        .input-card h2 { color: #003366; font-size: 18px; margin-bottom: 14px; }
+        .input-card p  { font-size: 13px; color: #777; margin-bottom: 12px; }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 12px;
+            border: 2px solid #dde3f0;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 14px;
+            resize: vertical;
+            outline: none;
+            transition: border 0.15s;
+        }
+        textarea:focus { border-color: #0056b3; }
+
+        .btn {
+            background: #0056b3;
+            color: white;
+            border: none;
+            padding: 11px 28px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 12px;
+            transition: background 0.15s;
+        }
+        .btn:hover { background: #003f80; }
+
+        .error-box {
+            background: #fff3f3;
+            border: 1px solid #f5c6cb;
+            border-left: 4px solid #e74c3c;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #c0392b;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 10px;
+            padding: 28px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        .result-card h2 {
+            color: #003366;
+            font-size: 18px;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e8f0fe;
+        }
+
+        .station-badge {
+            display: inline-block;
+            background: #003366;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            padding: 6px 18px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .param-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .param-item {
+            background: #f5f8ff;
+            border-radius: 8px;
+            padding: 14px 16px;
+            border-left: 4px solid #0056b3;
+        }
+        .param-item.temp  { border-left-color: #e74c3c; }
+        .param-item.dew   { border-left-color: #3498db; }
+        .param-item.wind  { border-left-color: #27ae60; }
+        .param-item.press { border-left-color: #8e44ad; }
+        .param-item.vis   { border-left-color: #f39c12; }
+        .param-item.wx    { border-left-color: #e67e22; }
+        .param-item.cloud { border-left-color: #95a5a6; }
+
+        .param-label {
+            font-size: 11px;
+            font-weight: bold;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        .param-value { font-size: 18px; font-weight: bold; color: #1a1a2e; }
+        .param-sub   { font-size: 12px; color: #777; margin-top: 2px; }
+
+        .detail-table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 10px; }
+        .detail-table th { background: #003366; color: white; padding: 10px 12px; text-align: left; }
+        .detail-table td { padding: 9px 12px; border-bottom: 1px solid #eee; color: #333; }
+        .detail-table tr:nth-child(even) { background: #f5f8ff; }
+        .detail-table tr:hover { background: #e8f0fe; }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: #003366;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 20px 0 10px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #dde3f0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <a href="/">← Dashboard</a>
+    <h1>📝 Single SYNOP Decode</h1>
+</div>
+
+<div class="main">
+
+    <div class="input-card">
+        <h2>Paste SYNOP Message</h2>
+        <p>Enter a single SYNOP FM-12 message starting with AAXX</p>
+        <form action="/decode" method="POST">
+            <textarea name="synop"
+                placeholder="Example: AAXX 06091 43279 32597 31410 10390 20264 30018 40035 83400 333 10264"
+            ></textarea>
+            <button type="submit" class="btn">🔍 Decode</button>
+        </form>
+    </div>
+
+    {% if errors %}
+    <div class="error-box">
+        {% for e in errors %}<div>⚠ {{ e }}</div>{% endfor %}
+    </div>
+    {% endif %}
+
+    {% if result %}
+    <div class="result-card">
+        <h2>📊 Decoded Result</h2>
+        <div class="station-badge">Station: {{ result.station }}</div>
+
+        {% set s1 = result.section1 %}
+        {% set hdr = result.header %}
+
+        <div class="param-grid">
+            {% if s1.get('T') is not none %}
+            <div class="param-item temp">
+                <div class="param-label">Temperature</div>
+                <div class="param-value">{{ s1.get('T') }} °C</div>
+            </div>
+            {% endif %}
+
+            {% if s1.get('Td') is not none %}
+            <div class="param-item dew">
+                <div class="param-label">Dew Point</div>
+                <div class="param-value">{{ s1.get('Td') }} °C</div>
+            </div>
+            {% endif %}
+
+            {% if s1.get('ff_kmph') is not none %}
+            <div class="param-item wind">
+                <div class="param-label">Wind Speed</div>
+                <div class="param-value">{{ s1.get('ff_kmph') }} km/h</div>
+                <div class="param-sub">{{ s1.get('dd_compass', '') }}</div>
+            </div>
+            {% endif %}
+
+            {% if s1.get('VV') %}
+            <div class="param-item vis">
+                <div class="param-label">Visibility</div>
+                <div class="param-value">{{ s1.get('VV') }}</div>
+            </div>
+            {% endif %}
+
+            {% if s1.get('P_stn') %}
+            <div class="param-item press">
+                <div class="param-label">Station Pressure</div>
+                <div class="param-value">{{ s1.get('P_stn') }}</div>
+            </div>
+            {% endif %}
+
+            {% if s1.get('P_slp') %}
+            <div class="param-item press">
+                <div class="param-label">Sea-Level Pressure</div>
+                <div class="param-value">{{ s1.get('P_slp') }}</div>
+            </div>
+            {% endif %}
+
+            {% if s1.get('ww') %}
+            <div class="param-item wx">
+                <div class="param-label">Present Weather</div>
+                <div class="param-value" style="font-size:14px;">{{ s1.get('ww') }}</div>
+            </div>
+            {% endif %}
+
+            {% if s1.get('N') %}
+            <div class="param-item cloud">
+                <div class="param-label">Cloud Cover</div>
+                <div class="param-value" style="font-size:14px;">{{ s1.get('N') }}</div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="section-title">Observation Details</div>
+        <table class="detail-table">
+            <tr><th>Parameter</th><th>Value</th></tr>
+            <tr><td>Observation Time</td><td>Day {{ hdr.get('day','—') }} of month, {{ hdr.get('hour','—') }}:00 UTC</td></tr>
+            <tr><td>Wind Measurement</td><td>{{ hdr.get('iw_desc','—') }}</td></tr>
+            {% if s1.get('iR') %}<tr><td>Precipitation Flag</td><td>{{ s1.get('iR') }}</td></tr>{% endif %}
+            {% if s1.get('iX') %}<tr><td>Station Type</td><td>{{ s1.get('iX') }}</td></tr>{% endif %}
+            {% if s1.get('h')  %}<tr><td>Lowest Cloud Base</td><td>{{ s1.get('h') }}</td></tr>{% endif %}
+            {% if s1.get('Nh') %}<tr><td>Lowest Layer Cover</td><td>{{ s1.get('Nh') }}</td></tr>{% endif %}
+            {% if s1.get('P_tend') %}<tr><td>Pressure Tendency</td><td>{{ s1.get('P_tend') }}</td></tr>{% endif %}
+            {% if s1.get('RRR')    %}<tr><td>Precipitation</td><td>{{ s1.get('RRR') }}</td></tr>{% endif %}
+            {% if s1.get('W1_desc') %}<tr><td>Past Weather W1</td><td>{{ s1.get('W1_desc') }}</td></tr>{% endif %}
+            {% if s1.get('W2_desc') %}<tr><td>Past Weather W2</td><td>{{ s1.get('W2_desc') }}</td></tr>{% endif %}
+            {% if s1.get('exact_time') %}<tr><td>Exact Obs Time</td><td>{{ s1.get('exact_time') }}</td></tr>{% endif %}
+        </table>
+
+        {% if result.section3 %}
+        {% set s3 = result.section3 %}
+        <div class="section-title">Section 3 – Additional Data</div>
+        <table class="detail-table">
+            <tr><th>Parameter</th><th>Value</th></tr>
+            {% if s3.get('Tx') is not none %}<tr><td>Max Temp (past 12h)</td><td>{{ s3.get('Tx') }} °C</td></tr>{% endif %}
+            {% if s3.get('Tn') is not none %}<tr><td>Min Temp (past 12h)</td><td>{{ s3.get('Tn') }} °C</td></tr>{% endif %}
+            {% if s3.get('RRR_s3')  %}<tr><td>Precipitation</td><td>{{ s3.get('RRR_s3') }}</td></tr>{% endif %}
+            {% if s3.get('sunshine') %}<tr><td>Sunshine</td><td>{{ s3.get('sunshine') }}</td></tr>{% endif %}
+            {% if s3.get('snow')    %}<tr><td>Snow / Ground</td><td>{{ s3.get('snow') }}</td></tr>{% endif %}
+        </table>
+        {% endif %}
+
+    </div>
+    {% endif %}
+
+</div>
+</body>
+</html>

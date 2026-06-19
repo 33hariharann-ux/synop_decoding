@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>SYNOP FM-12 Dashboard</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fa;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #003366 0%, #0056b3 100%);
+            color: white;
+            text-align: center;
+            padding: 32px 20px 28px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .header h1 { font-size: 28px; font-weight: bold; margin-bottom: 6px; }
+        .header p  { font-size: 14px; opacity: 0.85; letter-spacing: 0.5px; }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 22px;
+            max-width: 1100px;
+            margin: 42px auto 60px;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            flex: 0 1 300px;
+            min-width: 260px;
+            max-width: 320px;
+            padding: 28px 22px 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+            text-align: center;
+            transition: transform 0.18s, box-shadow 0.18s;
+            border-top: 4px solid #0056b3;
+        }
+
+        .card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,51,102,0.15); }
+
+        .card-icon { font-size: 36px; margin-bottom: 10px; }
+
+        .card h2 {
+            color: #003366;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 18px;
+            min-height: 42px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #0056b3;
+            color: white;
+            border: none;
+            padding: 11px 28px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+
+        .btn:hover { background: #003f80; }
+
+        .btn-disabled {
+            display: inline-block;
+            background: #b0bec5;
+            color: white;
+            padding: 11px 28px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: not-allowed;
+        }
+
+        .card-tag {
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .card.map-card  { border-top-color: #27ae60; }
+        .card.map-card h2 { color: #1a7a44; }
+        .card.map-card .btn { background: #27ae60; }
+        .card.map-card .btn:hover { background: #1e8449; }
+
+        .card.api-card { border-top-color: #8e44ad; }
+        .card.api-card h2 { color: #6c3483; }
+
+        .badge-new {
+            display: inline-block;
+            background: #27ae60;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 7px;
+            border-radius: 20px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>🌦 SYNOP FM-12 Surface Code Decoder</h1>
+        <p>IMD Weather Intelligence Dashboard</p>
+    </div>
+
+    <div class="container">
+
+        <div class="card">
+            <div class="card-icon">📝</div>
+            <h2>Single Decode</h2>
+            <p>Decode a single SYNOP message instantly and view all parameters.</p>
+            <a href="/single" class="btn">Open</a>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">📋</div>
+            <h2>Multi Decode</h2>
+            <p>Paste multiple SYNOP messages and decode them together with summary stats.</p>
+            <a href="/multi" class="btn">Open</a>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">📁</div>
+            <h2>Batch Upload</h2>
+            <p>Upload TXT files and decode all messages with charts and downloads.</p>
+            <a href="/batch" class="btn">Open</a>
+        </div>
+
+        <div class="card map-card">
+            <div class="card-icon">🗺️</div>
+            <h2>Station Map <span class="badge-new">NEW</span></h2>
+            <p>Plot decoded stations on an interactive map with weather condition markers.</p>
+            <a href="/map" class="btn">Open Map</a>
+            <div class="card-tag">Decode first, then view on map</div>
+        </div>
+
+        <div class="card api-card">
+            <div class="card-icon">📖</div>
+            <h2>API Docs</h2>
+            <p>Access REST API documentation for integration with other systems.</p>
+            <span class="btn-disabled">Coming Soon</span>
+            <div class="card-tag">API integration guide</div>
+        </div>
+
+    </div>
+
+</body>
+</html>
